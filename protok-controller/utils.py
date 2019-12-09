@@ -2,8 +2,8 @@ import os
 import subprocess
 from yaml_generator import YamlGenerator
 
-class Deployment(object):
-  deployment_name = ""
+class Pod(object):
+  pod_name = ""
   dep_type = "NodePort"
   yaml_file = ""
 
@@ -21,13 +21,13 @@ class Deployment(object):
     create = f"{self.deployment_name} created" in stdout.decode("utf-8")
 
   def expose(self):
-    out = subprocess.Popen(['kubectl', 'expose', 'deployment', self.deployment_name, f"--type={self.dep_type}"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    out = subprocess.Popen(['kubectl', 'expose', 'pod', self.deployment_name, f"--type={self.dep_type}"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout,stderr = out.communicate()
     print(stdout.decode("utf-8"))
     exposed = f"{self.deployment_name} exposed" in stdout.decode("utf-8")
 
   def delete(self):
-    out = subprocess.Popen(['kubectl', 'delete', 'deployment', self.deployment_name], 
+    out = subprocess.Popen(['kubectl', 'delete', 'pod', self.deployment_name], 
            stdout=subprocess.PIPE, 
            stderr=subprocess.STDOUT)
     stdout,stderr = out.communicate()

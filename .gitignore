@@ -1,4 +1,4 @@
 *.yaml
 __pycache__
 *.pyc
-
+protok_serverless/dependencies.txt
