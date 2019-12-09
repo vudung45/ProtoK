@@ -1,14 +1,14 @@
 {
-  "name": "server",
+  "name": "protok",
   "version": "1.0.0",
-  "description": "ProtoK Server",
+  "description": "A Serverless framework for Kubernetes.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "David Prasse, David Vu, Jonathan Nguyen",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1"
