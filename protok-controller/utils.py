@@ -74,7 +74,7 @@ class ServerlessFunction:
 				self.init_config = True
 				return True
 			except Exception as e:
-				# poorman error handling
+				# poorman error handlin
 				print(e)
 				self.init_config = False
 
@@ -95,7 +95,6 @@ class ServerlessFunction:
 			return False
 		deployed = True
 		return deployed
-
 
 
 if __name__ == "__main__":
