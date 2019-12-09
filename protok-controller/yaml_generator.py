@@ -1,5 +1,5 @@
 
-yaml_template = "apiVersion: v1 \nkind: Pod \nmetadata: \n  name: {service_name} \nspec: \n  selector: \n  replicas: 1 \n  restartPolicy: Never \n  containers: \n  - name: python-container \n    image: 3.7-slim-buster \n    volumeMounts: \n    - name: shared-data \n      mountPath: /usr/share/nginx/html"
+yaml_template = "apiVersion: apps/v1 \nkind: Deployment  \nmetadata:  \n  name: {service_name}  \nspec:  \n  selector:  \n    matchLabels: \n      app: {service_name} \n  replicas: 1  \n  template: \n    metadata: \n      labels: \n        app: {service_name} \n    spec: \n      containers: \n        - name: {service_name} \n          image: 3.7-slim-buster \n          ports: \n          - containerPort: 8080"
 
 class YamlGenerator(object):
   @classmethod
