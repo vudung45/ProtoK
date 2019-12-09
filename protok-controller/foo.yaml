@@ -1,0 +1,14 @@
+apiVersion: v1 
+kind: Pod 
+metadata: 
+  name: foo 
+spec: 
+  selector: 
+  replicas: 1 
+  restartPolicy: Never 
+  containers: 
+  - name: python-container 
+    image: 3.7-slim-buster 
+    volumeMounts: 
+    - name: shared-data 
+      mountPath: /usr/share/nginx/html
