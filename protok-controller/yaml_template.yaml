@@ -1,14 +1,1 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: %service_name%
-spec:
-  selector:
-  replicas: 1
-  restartPolicy: Never
-  containers:
-  - name: python-container
-    image: 3.7-slim-buster
-    volumeMounts:
-    - name: shared-data
-      mountPath: /usr/share/nginx/html
+apiVersion: apps/v1 \nkind: Deployment  \nmetadata:  \n  name: foo  \nspec:  \n  selector:  \n    matchLabels: \n      app: foo \n  replicas: 1  \n  template: \n    metadata: \n      labels: \n        app: foo \n    spec: \n      containers: \n        - name: foo \n          image: davidvu98/protok_serverless:basic\n          env: \n            - name: DEPENDENCIES\n              value: "dataclasses"\n            - name: FUNCTION_CONTENT\n              value: "if __name__ == \"__main__\": print(\"Hello world\")"\n          ports: \n          - containerPort: 8080

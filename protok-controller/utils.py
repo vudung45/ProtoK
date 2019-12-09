@@ -2,8 +2,8 @@ import os
 import subprocess
 from yaml_generator import YamlGenerator
 
-class Pod(object):
-  pod_name = ""
+class Deployment(object):
+  deployment_name = ""
   dep_type = "NodePort"
   yaml_file = ""
 
@@ -21,13 +21,13 @@ class Pod(object):
     create = f"{self.deployment_name} created" in stdout.decode("utf-8")
 
   def expose(self):
-    out = subprocess.Popen(['kubectl', 'expose', 'pod', self.deployment_name, f"--type={self.dep_type}"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    out = subprocess.Popen(['kubectl', 'expose', 'deployment', self.deployment_name, f"--type={self.dep_type}"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout,stderr = out.communicate()
     print(stdout.decode("utf-8"))
     exposed = f"{self.deployment_name} exposed" in stdout.decode("utf-8")
 
   def delete(self):
-    out = subprocess.Popen(['kubectl', 'delete', 'pod', self.deployment_name], 
+    out = subprocess.Popen(['kubectl', 'delete', 'deployment', self.deployment_name], 
            stdout=subprocess.PIPE, 
            stderr=subprocess.STDOUT)
     stdout,stderr = out.communicate()
@@ -61,7 +61,7 @@ class ServerlessFunction:
   def init_config(self, yaml_storage = "./yaml_storage", autogen_yaml = True, yaml_content = None) -> bool:
     if autogen_yaml:
       try:
-        YamlGenerator.generate(self.function_name, f"{yaml_storage}/{self.function_name}.yaml")
+        YamlGenerator.generate(self.function_name, self.dependencies, self.function_content, f"{yaml_storage}/{self.function_name}.yaml")
         self.init_config = True
       except Exception as e:
         # poorman error handling
@@ -91,7 +91,7 @@ class ServerlessFunction:
     deployed = True
 
 if __name__ == "__main__":
-  test_function = ServerlessFunction("foo", "def foo(): pass", "")
+  test_function = ServerlessFunction("foo", "if __name__ == '__main__': print('Hello world')", "")
   test_function.init_config()
   test_function.init_deployment()
   test_function.deployment.delete() 
