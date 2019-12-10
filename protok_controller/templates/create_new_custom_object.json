@@ -1,0 +1,10 @@
+{
+    "apiVersion": "stable.protok.com/v1",
+    "kind": "ServerlessFunction",
+    "metadata": {
+        "name": ""
+    },
+    "spec": {
+        "image": "davidvu98/protok_serverless:basic"
+    }
+}

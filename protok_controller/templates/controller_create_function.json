@@ -1,0 +1,6 @@
+{
+    "dependencies": "dataclasses",
+    "content": "def target(): print('gg')",
+  	"target_function": "target",
+  	"name": "helloworld"
+}

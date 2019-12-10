@@ -15,8 +15,6 @@ class YamlGenerator(object):
       f.write(yaml_content)
 
 
-
-
 # unit tests
 if __name__ == '__main__':
   YamlGenerator.generate("test_service", "test.yaml")
