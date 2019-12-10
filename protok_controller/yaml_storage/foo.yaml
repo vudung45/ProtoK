@@ -1,0 +1,24 @@
+apiVersion: apps/v1 
+kind: Deployment  
+metadata:  
+  name: foo  
+spec:  
+  selector:  
+    matchLabels: 
+      app: foo 
+  replicas: 1  
+  template: 
+    metadata: 
+      labels: 
+        app: foo 
+    spec: 
+      containers: 
+        - name: foo 
+          image: davidvu98/protok_serverless:basic
+          command: ["sleep", "1000.py"]
+          ports: 
+          - containerPort: 8080
+      initContainers:
+        - name: init-dependencies
+          image: davidvu98/protok_serverless:basic
+          command: ["python", "init_dependencies.py"]

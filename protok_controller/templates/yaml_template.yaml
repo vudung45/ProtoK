@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment  
+metadata:  
+  name: foo  
+  labels:
+    app: foo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foo
+  template:
+    metadata:
+      labels:
+        app: foo
+    spec:  
+      containers: 
+      - name: serve 
+        image: davidvu98/protok_serverless:latest
+        volumeMounts:
+        - name: config-data
+          mountPath: /data
+        command: ["sh", "-c", "python init_dependencies.py; python kickoff.py"]
+      initContainers:
+      - name: init-configs
+        image: debian
+        volumeMounts:
+        - name: config-data
+          mountPath: /data
+        env:
+        - name: SERVERLESS_CONFIG
+          value: "{}"
+        command: ["sh", "-c", "echo $SERVERLESS_CONFIG  > /data/config.json"]
+      volumes:
+      - name: config-data
+        emptyDir: {}
