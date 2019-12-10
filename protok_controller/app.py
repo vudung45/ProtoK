@@ -19,50 +19,6 @@ new_custom_object_payload = {
     }
 }
 
-new_deployment_payload = {
-  "apiVersion": "apps/v1",
-  "kind": "Deployment",
-  "metadata": {
-    "name": "foo",
-    "labels": {
-      "app": "foo"
-    }
-  },
-  "spec": {
-    "replicas": 1,
-    "selector": {
-      "matchLabels": {
-        "app": "foo"
-      }
-    },
-    "template": {
-      "metadata": {
-        "labels": {
-          "app": "foo"
-        }
-      },
-      "spec": {
-        "containers": [
-          {
-            "name": "foo",
-            "image": "davidvu98/protok_serverless:latest",
-            "command": [
-              "sleep",
-              "3000"
-            ],
-            "env": [
-              {
-                "name": "SERVERLESS_CONFIG",
-                "value": ""
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
-}
-
 @app.route('/create', methods=['POST'])
 def create_rest():
   try:
