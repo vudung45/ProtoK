@@ -4,7 +4,7 @@ A framework for Kubernetes that allows running serverless functions.
 Serverless functions made easy for Kubernetes through a beautiful UI.
 
 ## Requirements
-1. [NPM](https://www.npmjs.com/) - For managing Node Packages.
+1. [npm](https://www.npmjs.com/) - For managing Node Packages.
 2. [Python3](https://www.python.org/download/releases/3.0/) - For managing the Controller Backend.
 3. [Git](https://git-scm.com/) - Source control.
 
@@ -18,17 +18,17 @@ Serverless functions made easy for Kubernetes through a beautiful UI.
 ### Setup Web Frontend/Backend
 1. Clone the repository 
 ```sh
-$git clone https://github.com/dprasse/ProtoK.git
+$ git clone https://github.com/dprasse/ProtoK.git
 ```
 
 2. Install the required depenendencies from the main folder.
 ```sh
-$npm install
+$ npm install
 ```
 
 3. Run the startup script that will install the dependencies and launch the frontend and backend server.
 ```sh
-$npm start
+$ npm start
 ```
 
 4. You should now be able to access the frontend through your localhost url `http://localhost:8080/`
