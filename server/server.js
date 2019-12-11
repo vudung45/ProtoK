@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs')
 const util = require('util')
 const axios = require('axios');
+const querystring = require('querystring');
 
 const port = process.env.PORT || 3000;
 
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies)
 
 app.get('/', (req, res) => {
   res.send('Welcome to ProtoK.');
@@ -22,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/get_all', (req, res) => {
 
-  axios.get('http://10.145.196.253:5000/get_all')
+  axios.get('http://10.147.90.191:5000/get_all')
   .then((response) => {
 
     try {
@@ -55,6 +56,25 @@ app.get('/get_all', (req, res) => {
       }
 
       res.send(result);
+    } catch (error) {
+      res.send(error);
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+    res.send(error);
+  });
+});
+
+app.get('/logs', (req, res) => {
+  let name = req.query.name;
+
+  axios.get('http://10.147.90.191:5000/get_log?name=' + name)
+  .then((response) => {
+
+    try {
+      console.log(response.data);
+      res.send(response.data);
     } catch (error) {
       res.send(error);
     }
