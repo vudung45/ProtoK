@@ -1,4 +1,5 @@
 __pycache__
 *.pyc
 protok_serverless/dependencies.txt
-node_modules
+protok_controller/function_logs/*
+protok_serverless/logs

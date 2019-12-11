@@ -1,6 +1,6 @@
 {
     "dependencies": "dataclasses",
-    "content": "def target(message=''): print(message)",
-  	"func_name": "target",
+    "content": "def target(message1, message2): \n  print(message1)\n  print(message2)",
+  	"target_funcion": "target",
   	"name": "helloworld123"
 }

@@ -1,3 +1,6 @@
+"""
+Expose internal Kubernetes ServerlessFunction APIs to external network
+"""
 from flask import Flask, request, jsonify
 import json
 import requests
@@ -20,6 +23,7 @@ new_custom_object_payload = {
     }
 }
 
+
 @app.route('/create', methods=['POST'])
 @cross_origin()
 def create_rest():
@@ -35,22 +39,8 @@ def create_rest():
                       headers={"Content-Type": "application/json"}).json()
     return jsonify({"/apis/stable.protok.com/v1/namespaces/default/serverlessfunctions": resp_custom_object}), 201
   except Exception as e:
-    return jsonify({'success': False, 'error': str(e)})
+    return jsonify({'success': False, 'error': str(e)}), 503
 
-@app.route('/deploy', methods=['GET'])
-@cross_origin()
-def deploy():
-  try:
-    data = request.args
-    print(data)
-    service_to_deploy = data["name"]
-    deployment_payload = ServerlessDeploymentPayload(service_to_deploy).generate_payload()
-    resp_new_deployment = requests.post("http://127.0.0.1:8091/apis/apps/v1/namespaces/default/deployments", 
-                       data=json.dumps(deployment_payload), 
-                      headers={"Content-Type": "application/json"}).json()
-    return jsonify({"/apis/apps/v1/namespaces/default/deployments": resp_new_deployment}), 200
-  except Exception as e:
-    return jsonify({ 'success': False, 'error': str(e)})
 
 @app.route('/get_all', methods=['GET'])
 @cross_origin()
@@ -59,7 +49,7 @@ def get_all():
     resp_get_all = requests.get("http://127.0.0.1:8091/apis/stable.protok.com/v1/namespaces/default/serverlessfunctions").json()
     return jsonify({"/apis/stable.protok.com/v1/namespaces/default/serverlessfunctions": resp_get_all}), 200
   except Exception as e:
-    return jsonify({ 'success': False, 'error': str(e)})
+    return jsonify({ 'success': False, 'error': str(e)}), 503
 
 @app.route('/get_log', methods=['GET'])
 def get_log():
@@ -72,12 +62,10 @@ def get_log():
         return jsonify(json.loads(f.read()))
       return jsonify({})
     else:
-      return jsonify({"success": False, "error": f"function name {service_to_get} does not exist"})
+      return jsonify({"success": False, "error": f"function name {service_to_get} does not exist"}), 503
 
   except Exception as e:
-    return jsonify({ 'success': False, 'error': str(e)})
-
-
+    return jsonify({ 'success': False, 'error': str(e)}), 503
 
 
 if __name__ == "__main__":

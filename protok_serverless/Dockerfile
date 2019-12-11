@@ -1,4 +1,4 @@
-FROM python:3
+FROM davidvu98/http-trigger-dependencies:latest
 
-ADD kickoff.py /
-ADD init_dependencies.py /
+
+ADD http-trigger.py /
