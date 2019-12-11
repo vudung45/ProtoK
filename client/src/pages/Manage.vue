@@ -1,8 +1,8 @@
 <template>
   <div class="content">
-    <card>
+    <b-card>
       <Table/>
-    </card>
+    </b-card>
   </div>
 </template>
 <script>

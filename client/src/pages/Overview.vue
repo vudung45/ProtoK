@@ -2,9 +2,9 @@
   <div class="content">
     <div class="container-fluid">
       <div>
-        <card>
+        <b-card>
           <Form/>
-        </card>
+        </b-card>
       </div>
     </div>
   </div>
