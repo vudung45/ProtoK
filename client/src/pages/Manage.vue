@@ -1,16 +1,19 @@
 <template>
   <div class="content">
-    <div class="container-fluid">
-      <card>
-        <div class="md-6">
-          <h2> Future page for managing functions. </h2>
-        </div>
-      </card>
-    </div>
+    <card>
+      <Table/>
+    </card>
   </div>
 </template>
 <script>
-export default {};
+import Table from '@/components/Table.vue';
+
+export default {
+  name: 'Manage',
+  components: {
+    Table,
+  },
+};
 </script>
 <style>
 
