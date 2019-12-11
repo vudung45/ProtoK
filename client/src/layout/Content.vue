@@ -19,4 +19,8 @@ export default {};
   {
     opacity: 0
   }
+  .modal-backdrop
+{
+    opacity:0.5 !important;
+}
 </style>
