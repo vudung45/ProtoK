@@ -37,6 +37,6 @@ spec:
       - name: config-data
         emptyDir: {}
       - name: function-logs
-        hostPath: 
+        hostPath:
           path: /function_logs
           type: Directory

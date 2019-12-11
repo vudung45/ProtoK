@@ -42,5 +42,3 @@ if __name__ == "__main__":
       }
       with open(f"logs/{service_name}.json", "w+") as f:
         f.write(json.dumps(log_data))
-
-

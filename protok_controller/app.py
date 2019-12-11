@@ -77,6 +77,14 @@ def get_log():
   except Exception as e:
     return jsonify({ 'success': False, 'error': str(e)})
 
+@app.route('/run', methods=['POST'])
+@cross_origin()
+def run:
+  try:
+    data = request.json()
+    producer = KafkaProducer(bootstrap_servers='192.168.64.3:30092')
+    producer.send('foobar', b'some_message_bytes')
+
 
 
 
