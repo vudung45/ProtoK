@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs')
 const util = require('util')
+const axios = require('axios');
 
 const port = process.env.PORT || 3000;
 
@@ -63,6 +64,48 @@ app.get('/readdata', (req, res) => {
     res.send("Unable to load data. Make sure that temp.json has data in it.");
   }
 
+});
+
+app.get('/get_all', (req, res) => {
+
+  axios.get('http://10.145.196.253:5000/get_all')
+  .then((response) => {
+
+    try {
+      let items = response.data[Object.keys(response.data)[0]].items;
+      let result = [];
+
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i];
+        let tmpToReturn = {};
+        if (entry.metadata) {
+          if (entry.metadata.name) {
+            tmpToReturn['name'] = entry.metadata.name;
+          }
+        }
+        if (entry.spec) {
+          if (entry.spec.content) {
+            tmpToReturn['content'] = entry.spec.content;
+          }
+          if (entry.spec.dependencies) {
+            tmpToReturn['dependencies'] = entry.spec.dependencies;
+          }
+          if (entry.spec.target_function) {
+            tmpToReturn['func_name'] = entry.spec.target_function;
+          }
+        }
+        result.push(tmpToReturn);
+      }
+
+      res.send(result);
+    } catch (error) {
+      res.send(error);
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+    res.send(error);
+  });
 });
 
 app.listen(port, () => console.log('We are live on Port:' + port));
