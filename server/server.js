@@ -20,52 +20,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to ProtoK.');
 });
 
-app.get('/ping/', (req, res) => {
-  res.send('pong');
-});
-
-app.post('/create', (req, res) => {
-  const func = req.body.function;
-  const dependencies = req.body.dependencies;
-  const language = req.body.language;
-
-  let combined_vals = {"function": func, "dependencies": dependencies, "language": language};
-
-  try {
-    let readF = fs.readFileSync('./temp.json', 'utf-8');
-    let parsed = JSON.parse(readF);
-    parsed.entries.push(combined_vals);
-  
-    fs.writeFile('./temp.json', JSON.stringify(parsed), function (err) {
-  
-    });
-  } catch (error) {
-    // This error thrown is likely because we tried parsing (converting to JSON) an empty file
-    // In this case, we just create the correct json file with the new entry given
-    let parsed = JSON.parse('{"entries":[]}');
-    parsed.entries.push(combined_vals);
-
-    fs.writeFile('./temp.json', JSON.stringify(parsed), function (err) {
-  
-    });
-    console.log(error);
-  }
-
-  res.send(combined_vals);
-});
-
-app.get('/readdata', (req, res) => {
-
-  try {
-    let rawdata = fs.readFileSync('./temp.json');
-    let parsed = JSON.parse(rawdata);
-    res.send(parsed);
-  } catch (error) {
-    res.send("Unable to load data. Make sure that temp.json has data in it.");
-  }
-
-});
-
 app.get('/get_all', (req, res) => {
 
   axios.get('http://10.145.196.253:5000/get_all')
@@ -82,16 +36,19 @@ app.get('/get_all', (req, res) => {
           if (entry.metadata.name) {
             tmpToReturn['name'] = entry.metadata.name;
           }
+          if (entry.metadata.creationTimestamp) {
+            tmpToReturn['timestamp'] = entry.metadata.creationTimestamp;
+          }
         }
         if (entry.spec) {
+          if (entry.spec.target_function) {
+            tmpToReturn['func_name'] = entry.spec.target_function;
+          }
           if (entry.spec.content) {
             tmpToReturn['content'] = entry.spec.content;
           }
           if (entry.spec.dependencies) {
             tmpToReturn['dependencies'] = entry.spec.dependencies;
-          }
-          if (entry.spec.target_function) {
-            tmpToReturn['func_name'] = entry.spec.target_function;
           }
         }
         result.push(tmpToReturn);
