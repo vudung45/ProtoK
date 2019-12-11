@@ -322,7 +322,7 @@
 .navbar-form{
    @include box-shadow(none);
    .form-control{
-        @include light-form();
+        // @include light-form();
         height: 22px;
         font-size: $font-size-navbar;
         line-height: $line-height-general;
