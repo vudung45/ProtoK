@@ -1,4 +1,6 @@
-# ProtoK
+# ProtoK [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![made-with-VueJS](https://img.shields.io/badge/Made%20with-VueJS-1f425f.svg)](https://vuejs.org/) [![made-with-Node](https://img.shields.io/badge/Made%20with-Node-1f425f.svg)](https://nodejs.org/)
+
+
 
 A framework for Kubernetes that allows running serverless functions.
 Serverless functions made easy for Kubernetes through a beautiful UI.
@@ -32,6 +34,7 @@ $ npm start
 ```
 
 4. You should now be able to access the frontend through your localhost url `http://localhost:8080/`
+
 
 
 ## Demo:
