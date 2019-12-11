@@ -38,7 +38,12 @@
             "command": [
               "sh",
               "-c",
-              "python init_dependencies.py; python kickoff.py"
+              "python http-trigger.py;"
+            ],
+            "ports": [
+              {
+                "containerPort": 8080
+              }
             ]
           }
         ],

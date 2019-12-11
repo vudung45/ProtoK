@@ -1,7 +1,10 @@
 import requests
 import json
-with open("templates/create_new_deployment.json", "r") as f:
+with open("templates/http_trigger_deployment_template.json", "r") as f:
 	new_deployment_payload = json.loads(f.read())
+
+with open("templates/http_trigger_service_template.json", "r") as f:
+	new_service_payload = json.loads(f.read())
 
 class ServerlessDeploymentPayload:
 	service_name = ""
@@ -18,4 +21,25 @@ class ServerlessDeploymentPayload:
 		deployment_payload["spec"]["template"]["metadata"]["labels"]["app"] = servlfunc_object["metadata"]["name"]
 		deployment_payload["spec"]["template"]["spec"]["initContainers"][0]["env"][0]["value"] = json.dumps(servlfunc_object["spec"])
 		return deployment_payload
+
+	def generate_payload_from_crd(self, servlfunc_object):
+		deployment_payload = dict(new_deployment_payload)
+		deployment_payload["metadata"]["name"] = servlfunc_object["metadata"]["name"]
+		deployment_payload["metadata"]["labels"]["app"] = servlfunc_object["metadata"]["name"]
+		deployment_payload["spec"]["selector"]["matchLabels"]["app"] = servlfunc_object["metadata"]["name"]
+		deployment_payload["spec"]["template"]["metadata"]["labels"]["app"] = servlfunc_object["metadata"]["name"]
+		deployment_payload["spec"]["template"]["spec"]["initContainers"][0]["env"][0]["value"] = json.dumps(servlfunc_object["spec"])
+		return deployment_payload
+
+class ServicePayload:
+	service_name = ""
+	def __init__(self, service_name):
+		self.service_name = service_name
+
+	def generate_payload(self):
+		service_payload = dict(new_service_payload)
+		service_payload["metadata"]["labels"]["app"], service_payload["metadata"]["name"], \
+			service_payload["spec"]["selector"]["app"] = self.service_name, self.service_name, self.service_name
+		return service_payload
+
 

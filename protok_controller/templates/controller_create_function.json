@@ -2,5 +2,5 @@
     "dependencies": "dataclasses",
     "content": "def target(): print('gg')",
   	"func_name": "target",
-  	"name": "helloworld1234"
+  	"name": "helloworld"
 }
