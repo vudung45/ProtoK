@@ -29,6 +29,10 @@
               {
                 "name": "config-data",
                 "mountPath": "/data"
+              },
+              {
+                "name": "function-logs",
+                "mountPath": "/logs"
               }
             ],
             "command": [
@@ -65,6 +69,13 @@
           {
             "name": "config-data",
             "emptyDir": {}
+          },
+          {
+            "name": "function-logs",
+            "hostPath": {
+              "path": "/function_logs",
+              "type": "Directory"
+            }
           }
         ]
       }
