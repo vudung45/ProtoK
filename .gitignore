@@ -1,3 +1,4 @@
 __pycache__
 *.pyc
 protok_serverless/dependencies.txt
+node_modules
