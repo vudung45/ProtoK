@@ -20,6 +20,8 @@ spec:
         volumeMounts:
         - name: config-data
           mountPath: /data
+        - name: function-logs
+          mountPath: /logs
         command: ["sh", "-c", "python init_dependencies.py; python kickoff.py"]
       initContainers:
       - name: init-configs
@@ -34,3 +36,7 @@ spec:
       volumes:
       - name: config-data
         emptyDir: {}
+      - name: function-logs
+        hostPath: 
+          path: /function_logs
+          type: Directory

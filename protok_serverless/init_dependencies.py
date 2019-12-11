@@ -9,3 +9,4 @@ if __name__ == "__main__":
     if "dependencies" in config:
 	    os.system(f"echo {config['dependencies']} > dependencies.txt")
 	    os.system("pip install -r dependencies.txt")
+	    
