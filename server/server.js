@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs')
 const util = require('util')
+const axios = require('axios');
 
 const port = process.env.PORT || 3000;
 
@@ -19,50 +20,49 @@ app.get('/', (req, res) => {
   res.send('Welcome to ProtoK.');
 });
 
-app.get('/ping/', (req, res) => {
-  res.send('pong');
-});
+app.get('/get_all', (req, res) => {
 
-app.post('/create', (req, res) => {
-  const func = req.body.function;
-  const dependencies = req.body.dependencies;
-  const language = req.body.language;
+  axios.get('http://10.145.196.253:5000/get_all')
+  .then((response) => {
 
-  let combined_vals = {"function": func, "dependencies": dependencies, "language": language};
+    try {
+      let items = response.data[Object.keys(response.data)[0]].items;
+      let result = [];
 
-  try {
-    let readF = fs.readFileSync('./temp.json', 'utf-8');
-    let parsed = JSON.parse(readF);
-    parsed.entries.push(combined_vals);
-  
-    fs.writeFile('./temp.json', JSON.stringify(parsed), function (err) {
-  
-    });
-  } catch (error) {
-    // This error thrown is likely because we tried parsing (converting to JSON) an empty file
-    // In this case, we just create the correct json file with the new entry given
-    let parsed = JSON.parse('{"entries":[]}');
-    parsed.entries.push(combined_vals);
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i];
+        let tmpToReturn = {};
+        if (entry.metadata) {
+          if (entry.metadata.name) {
+            tmpToReturn['name'] = entry.metadata.name;
+          }
+          if (entry.metadata.creationTimestamp) {
+            tmpToReturn['timestamp'] = entry.metadata.creationTimestamp;
+          }
+        }
+        if (entry.spec) {
+          if (entry.spec.target_function) {
+            tmpToReturn['func_name'] = entry.spec.target_function;
+          }
+          if (entry.spec.content) {
+            tmpToReturn['content'] = entry.spec.content;
+          }
+          if (entry.spec.dependencies) {
+            tmpToReturn['dependencies'] = entry.spec.dependencies;
+          }
+        }
+        result.push(tmpToReturn);
+      }
 
-    fs.writeFile('./temp.json', JSON.stringify(parsed), function (err) {
-  
-    });
+      res.send(result);
+    } catch (error) {
+      res.send(error);
+    }
+  })
+  .catch((error) => {
     console.log(error);
-  }
-
-  res.send(combined_vals);
-});
-
-app.get('/readdata', (req, res) => {
-
-  try {
-    let rawdata = fs.readFileSync('./temp.json');
-    let parsed = JSON.parse(rawdata);
-    res.send(parsed);
-  } catch (error) {
-    res.send("Unable to load data. Make sure that temp.json has data in it.");
-  }
-
+    res.send(error);
+  });
 });
 
 app.listen(port, () => console.log('We are live on Port:' + port));
