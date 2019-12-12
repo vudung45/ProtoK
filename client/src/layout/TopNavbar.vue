@@ -13,17 +13,6 @@
         <span class="navbar-toggler-bar burger-lines"></span>
         <span class="navbar-toggler-bar burger-lines"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-end">
-        <ul class="nav navbar-nav mr-auto">
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              Some text here.
-            </a>
-          </li>
-        </ul>
-      </div>
     </div>
   </nav>
 </template>

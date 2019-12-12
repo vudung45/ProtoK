@@ -10,8 +10,12 @@
           id="input-1"
           v-model="form.name"
           required
-          placeholder="eg: Production Logger"
+          trim
+          placeholder="eg: production-logger"
         ></b-form-input>
+        <b-form-invalid-feedback>
+          Please use all lower-case and delimited by a - or .
+        </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group id="input-group-2" label="Your Function Name:" label-for="input-2">
@@ -19,6 +23,7 @@
           id="input-2"
           v-model="form.func_name"
           required
+          trim
           placeholder="eg: helloworld"
           description="This must be [a-z] and can only be delimited by '-'"
         ></b-form-input>
@@ -29,6 +34,7 @@
           id="input-3"
           v-model="form.content"
           required
+          trim
           placeholder="eg: def helloworld(): print('this is a message.')"
         ></b-form-input>
       </b-form-group>
@@ -37,6 +43,7 @@
         <b-form-input
           id="input-4"
           v-model="form.dependencies"
+          trim
           placeholder="eg: dataclasses"
           description="These would be the import statements at the top"
         ></b-form-input>
@@ -106,7 +113,7 @@ export default {
       evt.preventDefault();
       this.shouldDisableButtons = true;
 
-      axios.post('http://10.145.196.253:5000/create', this.form)
+      axios.post('http://localhost:5000/create', this.form)
         .then((response) => {
           console.log(response);
           this.variant = 'success';

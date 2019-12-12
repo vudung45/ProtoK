@@ -1,7 +1,14 @@
-# ProtoK
+# ProtoK [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![made-with-VueJS](https://img.shields.io/badge/Made%20with-VueJS-1f425f.svg)](https://vuejs.org/) [![made-with-Node](https://img.shields.io/badge/Made%20with-Node-1f425f.svg)](https://nodejs.org/)
 
-A serverless framework for Kubernetes that allows running functions.
+
+
+A framework for Kubernetes that allows running serverless functions.
 Serverless functions made easy for Kubernetes through a beautiful UI.
+
+## Requirements
+1. [npm](https://www.npmjs.com/) - For managing Node Packages.
+2. [Python3](https://www.python.org/download/releases/3.0/) - For managing the Controller Backend.
+3. [Git](https://git-scm.com/) - Source control.
 
 ## Installation
 ### Setup Kubernetes Infra
@@ -10,7 +17,23 @@ Serverless functions made easy for Kubernetes through a beautiful UI.
 3. `cd protok_controller; ./app.py` to run python CRD controller
 4. Now Protok Kubernetes infrastructure should be fully setup if all of these go through
 
-### Setup Web Frontend&Backend
+### Setup Web Frontend/Backend
+1. Clone the repository 
+```sh
+$ git clone https://github.com/dprasse/ProtoK.git
+```
+
+2. Install the required depenendencies from the main folder.
+```sh
+$ npm install
+```
+
+3. Run the startup script that will install the dependencies and launch the frontend and backend server.
+```sh
+$ npm start
+```
+
+4. You should now be able to access the frontend through your localhost url `http://localhost:8080/`
 
 
 
@@ -24,5 +47,13 @@ Serverless functions made easy for Kubernetes through a beautiful UI.
 ## Info
 `TODO: Info Section / Pictures / Demo`
 
+
+
 ## Credit
-`TODO: link to any credits`
+1. [Kubernetes](https://kubernetes.io/) - Container Orchestration.
+2. [Dr. Vijay Chidambaram](http://www.cs.utexas.edu/~vijay/) - CS378 Virtualization Class
+3. [VueJS](https://vuejs.org/) - Frontend Framework.
+4. [BootstrapVue](https://bootstrap-vue.js.org/) - Frontend Framework. 
+5. [CreativeTim](https://www.creative-tim.com/) - Portions of Dashboard Templating.
+6. [ExpressJS](https://expressjs.com/) - Web Backend Framework.
+7. [Flask](https://www.fullstackpython.com/flask.html) - Python Backend Framework.

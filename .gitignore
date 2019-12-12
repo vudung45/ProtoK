@@ -4,3 +4,4 @@ protok_serverless/dependencies.txt
 protok_controller/function_logs/*
 protok_serverless/logs
 output.json
+node_modules
