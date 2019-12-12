@@ -16,10 +16,12 @@ new_custom_object_payload = {
         "name": None
     },
     "spec": {
+        "name" : "",
         "dependencies": "",
         "content": "",
-        "target_function": ""
-
+        "target_function": "",
+        "kafka_server" : "",
+        "trigger_type" : ""
     }
 }
 
@@ -31,12 +33,17 @@ def create_rest():
     data = request.get_json()
     custom_object_payload = dict(new_custom_object_payload)
     custom_object_payload["metadata"]["name"] = data["name"]
+    custom_object_payload["spec"]["name"] = data["name"]
     custom_object_payload["spec"]["content"] = data["content"]
-    custom_object_payload["spec"]["dependencies"] =  data["dependencies"]
+    custom_object_payload["spec"]["dependencies"] =  data.get("dependencies","")
     custom_object_payload["spec"]["target_function"] = data["func_name"]
+    custom_object_payload["spec"]["kafka_server"] = data.get("kafka_server")
+    custom_object_payload["spec"]["trigger_type"] = data.get("trigger_type", "http-trigger")
+
     resp_custom_object = requests.post("http://127.0.0.1:8091/apis/stable.protok.com/v1/namespaces/default/serverlessfunctions", 
-                       data=json.dumps(custom_object_payload), 
-                      headers={"Content-Type": "application/json"}).json()
+                        data=json.dumps(custom_object_payload), 
+                        headers={"Content-Type": "application/json"}).json()
+    print(resp_custom_object)
     return jsonify({"/apis/stable.protok.com/v1/namespaces/default/serverlessfunctions": resp_custom_object}), 201
   except Exception as e:
     return jsonify({'success': False, 'error': str(e)}), 503

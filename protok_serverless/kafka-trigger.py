@@ -5,10 +5,13 @@ import time
 from io import StringIO
 from kafka import KafkaConsumer
 
-KAFKA_ADVERTISED_HOST_NAME = os.environ["KAFKA_ADVERTISED_HOST_NAME"]
-KAFKA_ADVERTISED_PORT= os.environ["KAFKA_ADVERTISED_PORT"]
 
-DEFAULT_LOG_DEST = f"./logs/{os.environ['HOSTNAME'].split('-')[0]}.json"
+CONFIG = {}
+with open("data/config.json", "r") as f:
+  CONFIG = json.loads(f.read())
+service_name = CONFIG['name']
+
+DEFAULT_LOG_DEST = f"./logs/{service_name}.json"
 class Logger:
   log_dest = DEFAULT_LOG_DEST
   log_data = {}
@@ -23,10 +26,6 @@ class Logger:
     with open(self.log_dest, "w+") as f:
       f.write(json.dumps(self.log_data))
 
-CONFIG = {}
-with open("data/config.json", "r") as f:
-  CONFIG = json.loads(f.read())
-
 LOGGER = Logger()
 
 
@@ -38,6 +37,7 @@ if __name__ == "__main__":
   function_content = CONFIG["content"]
   target_function = CONFIG["target_function"]
   service_name = CONFIG["name"]
+  kafka_server = CONFIG["kafka_server"]
 
   try:
     exec(function_content) # inject function content to the runtime environment
@@ -47,14 +47,15 @@ if __name__ == "__main__":
     raise e
 
   #Kafka Comsumer
-  consumer = KafkaConsumer(service_name, bootstrap_servers=f"{KAFKA_ADVERTISED_HOST_NAME}:{KAFKA_ADVERTISED_PORT}")
+  consumer = KafkaConsumer(service_name, bootstrap_servers=kafka_server)
   for msg in consumer:
+    value = msg.value
     # get function arguments from Kafka topic
     old_stdout, old_stderr  = sys.stdout, sys.stderr
     sys.stdout, sys.stderr = StringIO(),  StringIO()
     # inject the code into function runtime environment
     try:
-      exec(f"{target_function}({msg})")
+      exec(f"{target_function}({value})")
       LOGGER.log(sys.stdout.getvalue(),  sys.stderr.getvalue())
     except Exception as e:
       LOGGER.log(sys.stdout.getvalue(), repr(e))

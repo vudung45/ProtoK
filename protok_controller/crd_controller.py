@@ -33,7 +33,7 @@ if __name__ == "__main__":
           print(requests.post("http://127.0.0.1:8091/api/v1/namespaces/default/services", 
                        data=json.dumps(service_payload), 
                       headers={"Content-Type": "application/json"}).json())
-          deployment_payload = ServerlessDeploymentPayload(service_to_deploy).generate_payload_from_crd(data)
+          deployment_payload = ServerlessDeploymentPayload(service_to_deploy, type=data["spec"]["trigger_type"]).generate_payload_from_crd(data)
           print(requests.post("http://127.0.0.1:8091/apis/apps/v1/namespaces/default/deployments", 
                        data=json.dumps(deployment_payload), 
                       headers={"Content-Type": "application/json"}).json())

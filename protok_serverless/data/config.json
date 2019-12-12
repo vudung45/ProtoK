@@ -1,6 +1,9 @@
 {
     "dependencies": "dataclasses",
     "content": "def target(message1, message2): \n  print(message1)\n  print(message2)",
-  	"target_funcion": "target",
-  	"name": "helloworld123"
+  	"target_function": "target",
+  	"name": "helloworld123",
+  	"kafka_server" : "192.168.64.3:30092",
+  	"trigger_type" : "kafka"
+
 }

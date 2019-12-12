@@ -38,7 +38,7 @@
             "command": [
               "sh",
               "-c",
-              "python kafka-trigger.py;"
+              "sleep 3000;python kafka-trigger.py;"
             ],
             "ports": [
               {

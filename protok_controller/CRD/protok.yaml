@@ -26,6 +26,13 @@ spec:
                   type: string
                 target_function:
                   type: string
+                name:
+                  type: string
+                kafka_server:
+                  type: string
+                trigger_type:
+                  type: string
+
                 
   scope: Namespaced
   names:
