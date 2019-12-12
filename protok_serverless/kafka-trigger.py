@@ -1,10 +1,12 @@
-from flask import Flask, request, jsonify
-import json
-import requests
-import time
 import os
 import sys
+import json
+import time
 from io import StringIO
+from kafka import KafkaConsumer
+
+KAFKA_ADVERTISED_HOST_NAME = os.environ["KAFKA_ADVERTISED_HOST_NAME"]
+KAFKA_ADVERTISED_PORT= os.environ["KAFKA_ADVERTISED_PORT"]
 
 DEFAULT_LOG_DEST = f"./logs/{os.environ['HOSTNAME'].split('-')[0]}.json"
 class Logger:
@@ -12,7 +14,7 @@ class Logger:
   log_data = {}
 
   def __init__(self, log_dest = DEFAULT_LOG_DEST):
-    self.log_dest = DEFAULT_LOG_DEST
+    self.log_dest = log_dest
 
   def log(self, stdout, stderr):
     self.log_data[int(time.time())] = {"stdout": stdout, "stderr": stderr}
@@ -21,35 +23,11 @@ class Logger:
     with open(self.log_dest, "w+") as f:
       f.write(json.dumps(self.log_data))
 
-
-app = Flask(__name__)
-
 CONFIG = {}
 with open("data/config.json", "r") as f:
   CONFIG = json.loads(f.read())
 
 LOGGER = Logger()
-
-
-@app.route('/', methods=['POST'])
-def main():
-  function_args = dict(request.get_json())
-  old_stdout, old_stderr  = sys.stdout, sys.stderr
-  sys.stdout, sys.stderr = StringIO(),  StringIO()
-  try:
-    exec(f"{target_function}(**function_args)")
-    LOGGER.log(sys.stdout.getvalue(),  sys.stderr.getvalue())
-    output_json = jsonify({"stdout": sys.stdout.getvalue(), "stderr": sys.stderr.getvalue()})
-
-  except Exception as e:
-    LOGGER.log(sys.stdout.getvalue(), repr(e))
-    output_json = jsonify({"stdout": sys.stdout.getvalue(), "stderr": repr(e)})
-
-  LOGGER.write()
-  sys.stdout, sys.stderr = old_stdout, old_stderr
-    
-  return output_json
- 
 
 
 if __name__ == "__main__":
@@ -59,6 +37,7 @@ if __name__ == "__main__":
       os.system("pip install -r dependencies.txt")
   function_content = CONFIG["content"]
   target_function = CONFIG["target_function"]
+  service_name = CONFIG["name"]
 
   try:
     exec(function_content) # inject function content to the runtime environment
@@ -67,4 +46,19 @@ if __name__ == "__main__":
     LOGGER.write()
     raise e
 
-  app.run(host='0.0.0.0',port=8080)
+  #Kafka Comsumer
+  consumer = KafkaConsumer(service_name, bootstrap_servers=f"{KAFKA_ADVERTISED_HOST_NAME}:{KAFKA_ADVERTISED_PORT}")
+  for msg in consumer:
+    # get function arguments from Kafka topic
+    old_stdout, old_stderr  = sys.stdout, sys.stderr
+    sys.stdout, sys.stderr = StringIO(),  StringIO()
+    # inject the code into function runtime environment
+    try:
+      exec(f"{target_function}({msg})")
+      LOGGER.log(sys.stdout.getvalue(),  sys.stderr.getvalue())
+    except Exception as e:
+      LOGGER.log(sys.stdout.getvalue(), repr(e))
+
+    LOGGER.write()
+    sys.stdout, sys.stderr = old_stdout, old_stderr
+      

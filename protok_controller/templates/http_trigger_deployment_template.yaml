@@ -34,7 +34,7 @@ spec:
         env:
         - name: SERVERLESS_CONFIG
           value: "{}"
-        command: ["sh", "-c", "echo $SERVERLESS_CONFIG  > /data/config.json"]
+        command: ["sh", "-c", "echo -e $SERVERLESS_CONFIG  > /data/config.json"]
       volumes:
       - name: config-data
         emptyDir: {}

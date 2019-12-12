@@ -22,7 +22,7 @@ if __name__ == "__main__":
     api_client = client.api_client.ApiClient(configuration=configuration)
     crds = client.CustomObjectsApi(api_client)
 
-    print("Listing to changes in /apis/stable.protok.com/v1/namespaces/default/serverlessfunctions")
+    print("Listening to changes in /apis/stable.protok.com/v1/namespaces/default/serverlessfunctions")
     resource_version = ''
     while True:
         stream = watch.Watch().stream(crds.list_cluster_custom_object, DOMAIN, "v1", "serverlessfunctions", resource_version=resource_version)

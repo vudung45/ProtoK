@@ -8,8 +8,9 @@ with open("templates/http_trigger_service_template.json", "r") as f:
 
 class ServerlessDeploymentPayload:
 	service_name = ""
-	def __init__(self, service_name):
+	def __init__(self, service_name, type="http_trigger"):
 		self.service_name = service_name
+		self.type = type
 
 	def generate_payload(self):
 		deployment_payload = dict(new_deployment_payload)

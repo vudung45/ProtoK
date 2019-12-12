@@ -38,7 +38,7 @@
             "command": [
               "sh",
               "-c",
-              "python http-trigger.py;"
+              "python kafka-trigger.py;"
             ],
             "ports": [
               {
