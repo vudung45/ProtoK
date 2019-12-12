@@ -1,5 +1,13 @@
 <template>
   <div class="hello">
+    <b-alert
+      :show="shouldShowAlert"
+      :variant=variant
+      class="mt-3"
+    >
+      {{alertMessage}}
+    </b-alert>
+
     <b-table striped hover :busy="isLoading" :items="functions" :fields="fields">
       <template v-slot:table-busy>
         <div class="text-center text-danger my-2">
@@ -9,11 +17,30 @@
       </template>
 
       <template v-slot:cell(actions)="row">
+        <b-button
+         variant="outline-primary"
+         size="sm"
+         @click="run(row.item, row.index, $event.target)"
+         class="mr-1"
+         >
+          Run Function
+        </b-button>
         <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
           View Logs
         </b-button>
       </template>
     </b-table>
+
+    <!-- Run modal -->
+    <b-modal :id="runModal.id" :title="runModal.title" @ok="executeFunction" @hide="resetRunModal">
+      <b-form-group label-cols="4" label-cols-lg="2" label="Name" label-for="runModal.name">
+        <b-form-input disabled :value="runModal.name"></b-form-input>
+      </b-form-group>
+      <b-form-group label-cols="4" label-cols-lg="2" label="Argument" label-for="runModal.args">
+        <b-form-input v-model="argument.key" placeholder="key"></b-form-input>
+        <b-form-input v-model="argument.val" placeholder="value"></b-form-input>
+      </b-form-group>
+    </b-modal>
 
     <!-- Info modal -->
     <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
@@ -56,6 +83,19 @@ export default {
         title: '',
         content: '',
       },
+      runModal: {
+        id: 'run-modal',
+        title: '',
+        name: '',
+        args: '',
+      },
+      argument: {
+        key: '',
+        val: '',
+      },
+      variant: 'primary',
+      shouldShowAlert: false,
+      alertMessage: '',
     };
   },
   methods: {
@@ -77,9 +117,42 @@ export default {
           console.log(error);
         });
     },
+    run(item, index, button) {
+      this.runModal.title = `Run ${item.name}`;
+      this.runModal.name = item.name;
+      this.$root.$emit('bv::show::modal', this.runModal.id, button);
+    },
     resetInfoModal() {
       this.infoModal.title = '';
       this.infoModal.content = '';
+    },
+    resetRunModal() {
+      this.runModal.title = '';
+      this.runModal.args = '';
+      this.argument.key = '';
+      this.argument.val = '';
+    },
+    executeFunction() {
+      let combined = {'name': this.runModal.name};
+      combined.args = {}
+      if (this.argument.key && this.argument.val) {
+        combined.args[this.argument.key] = this.argument.val;
+      }
+
+      console.log(combined);
+      axios.post(`http://localhost:5000/run`, combined)
+        .then((response) => {
+          this.variant = 'success';
+          this.alertMessage = `Successfully ran the function ${this.runModal.name}. Click 'View Logs' to see the output.`;
+          this.shouldShowAlert = true;
+          console.log(response)
+        })
+        .catch((error) => {
+          this.variant = 'danger';
+          this.alertMessage = `Something went wrong running the function ${this.runModal.name}. Check the console for errors.`;
+          this.shouldShowAlert = true;
+          console.log(error);
+        });
     },
   },
 };
