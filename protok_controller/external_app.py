@@ -25,6 +25,11 @@ new_custom_object_payload = {
     }
 }
 
+run_custom_object_payload = {
+  "name" : "",
+  "func_args" : {}
+}
+
 
 @app.route('/create', methods=['POST'])
 @cross_origin()
@@ -37,7 +42,7 @@ def create_rest():
     custom_object_payload["spec"]["content"] = data["content"]
     custom_object_payload["spec"]["dependencies"] =  data.get("dependencies","")
     custom_object_payload["spec"]["target_function"] = data["func_name"]
-    custom_object_payload["spec"]["kafka_server"] = data.get("kafka_server")
+    custom_object_payload["spec"]["kafka_server"] = data.get("kafka_server", "")
     custom_object_payload["spec"]["trigger_type"] = data.get("trigger_type", "http-trigger")
 
     resp_custom_object = requests.post("http://127.0.0.1:8091/apis/stable.protok.com/v1/namespaces/default/serverlessfunctions", 
@@ -59,6 +64,7 @@ def get_all():
     return jsonify({ 'success': False, 'error': str(e)}), 503
 
 @app.route('/get_log', methods=['GET'])
+@cross_origin()
 def get_log():
   try:
     data = request.args
@@ -73,6 +79,18 @@ def get_log():
 
   except Exception as e:
     return jsonify({ 'success': False, 'error': str(e)}), 503
+
+@app.route('/run', methods=['POST'])
+@cross_origin()
+def run():
+  try:
+    data = request.get_json()
+    url = f"http://127.0.0.1:8091/api/v1/namespaces/default/services/{data['name']}:http-function-port/proxy/"
+    resp_custom_object = requests.post(url, data=json.dumps(data["args"]), headers={"Content-Type": "application/json"}).json()
+    print(json.dumps(data["args"]))
+    return jsonify({"resp_custom_object": resp_custom_object}), 201
+  except Exception as e:
+      return jsonify({"success": False, "error": repr(e)}), 503
 
 
 if __name__ == "__main__":

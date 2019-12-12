@@ -6,7 +6,12 @@ import os
 import sys
 from io import StringIO
 
-DEFAULT_LOG_DEST = f"./logs/{os.environ['HOSTNAME'].split('-')[0]}.json"
+CONFIG = {}
+with open("data/config.json", "r") as f:
+  CONFIG = json.loads(f.read())
+service_name = CONFIG['name']
+
+DEFAULT_LOG_DEST = f"./logs/{service_name}.json"
 class Logger:
   log_dest = DEFAULT_LOG_DEST
   log_data = {}
@@ -24,9 +29,6 @@ class Logger:
 
 app = Flask(__name__)
 
-CONFIG = {}
-with open("data/config.json", "r") as f:
-  CONFIG = json.loads(f.read())
 
 LOGGER = Logger()
 
