@@ -3,7 +3,7 @@ import smtplib
 gmail_user = 'protoktest1@gmail.com'
 gmail_password = 'protoktest123'
 
-def send_email(send_to, subject, body):
+def send_email(send_to, subject="hi", body="hi"):
   email_text = """\
   From: %s
   To: %s
