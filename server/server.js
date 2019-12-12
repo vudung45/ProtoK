@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/get_all', (req, res) => {
 
-  axios.get('http://10.147.90.191:5000/get_all')
+  axios.get('http://localhost:5000/get_all')
   .then((response) => {
 
     try {
@@ -69,7 +69,7 @@ app.get('/get_all', (req, res) => {
 app.get('/logs', (req, res) => {
   let name = req.query.name;
 
-  axios.get('http://10.147.90.191:5000/get_log?name=' + name)
+  axios.get('http://localhost:5000/get_log?name=' + name)
   .then((response) => {
 
     try {

@@ -113,7 +113,7 @@ export default {
       evt.preventDefault();
       this.shouldDisableButtons = true;
 
-      axios.post('http://10.145.196.253:5000/create', this.form)
+      axios.post('http://localhost:5000/create', this.form)
         .then((response) => {
           console.log(response);
           this.variant = 'success';
