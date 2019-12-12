@@ -1,1 +1,2 @@
-*.scss linguist-language=Vue
+* linguist-vendored
+*.js linguist-vendored=false
