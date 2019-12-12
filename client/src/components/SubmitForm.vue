@@ -30,13 +30,14 @@
       </b-form-group>
 
       <b-form-group id="input-group-3" label="Your Function:" label-for="input-3">
-        <b-form-input
+        <b-form-textarea
           id="input-3"
           v-model="form.content"
           required
           trim
+          rows="5"
           placeholder="eg: def helloworld(): print('this is a message.')"
-        ></b-form-input>
+        ></b-form-textarea>
       </b-form-group>
 
       <b-form-group id="input-group-4" label="Your Dependencies:" label-for="input-4">
